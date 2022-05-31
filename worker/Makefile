@@ -1,13 +1,12 @@
-
-SLURM_VERSION = 19.05.1
-IMAGE = scidas/slurm.worker
+SLURM_VERSION = 21.08.8-2
+IMAGE = slurm.worker
 
 .PHONY: all build clean test
 
 all: build
 
 build:
-	docker build -t $(IMAGE):$(SLURM_VERSION) .
+	docker build -t $(IMAGE) .
 
 clean:
-	@[ -z $(docker images -q $(IMAGE):$(SLURM_VERSION)) ] || docker rmi $(IMAGE):$(SLURM_VERSION)
+	@[ -z $(docker images -q $(IMAGE)) ] || docker rmi $(IMAGE)

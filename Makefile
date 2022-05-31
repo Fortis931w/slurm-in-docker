@@ -1,4 +1,4 @@
-subdir = packages base controller worker database
+subdir = packages base controller worker 
 
 .PHONY: all build clean lint test $(subdir)
 
@@ -8,13 +8,11 @@ build: $(subdir)
 
 clean: $(subdir)
 
-test:
-	$(MAKE) -C $@
 
 lint:
 	shellcheck **/*.sh
 
-controller worker database: base
+controller worker : base
 
 base: packages
 

@@ -1,6 +1,5 @@
-
-SLURM_VERSION = 19.05.1
-IMAGE = scidas/slurm.controller
+SLURM_VERSION = 21.08.8-2
+IMAGE = slurm.controller
 
 .PHONY: all build clean test
 
@@ -8,7 +7,7 @@ IMAGE = scidas/slurm.controller
 all: build
 
 build:
-	docker build -t $(IMAGE):$(SLURM_VERSION) .
+	docker build -t $(IMAGE) .
 
 clean:
-	@[ -z $(docker images -q $(IMAGE):$(SLURM_VERSION)) ] || docker rmi $(IMAGE):$(SLURM_VERSION)
+	@[ -z $(docker images -q $(IMAGE)) ] || docker rmi $(IMAGE)

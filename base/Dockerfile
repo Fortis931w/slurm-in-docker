@@ -1,8 +1,5 @@
 FROM krallin/centos-tini:7
-MAINTAINER Michael J. Stealey <stealey@renci.org>
-
-ENV SLURM_VERSION=19.05.1 \
-  MUNGE_UID=981 \
+ENV MUNGE_UID=981 \
   SLURM_UID=982 \
   WORKER_UID=1000
 
@@ -13,34 +10,17 @@ RUN groupadd -g $MUNGE_UID munge \
   && groupadd -g $WORKER_UID worker \
   && useradd  -m -c "Workflow user" -d /home/worker -u $WORKER_UID -g worker  -s /bin/bash worker
 
-# install packages for general functionality
-RUN yum -y install \
-  epel-release \
-  && yum -y install \
-  sudo \
-  wget \
-  which \
-  tree \
-  mariadb-server \
-  mariadb-devel \
-  munge \
-  munge-libs \
-  munge-devel \
-  openssh-server \
-  openssh-clients
+RUN sed -e 's|^mirrorlist=|#mirrorlist=|g' \
+         -e 's|^#baseurl=http://mirror.centos.org|baseurl=https://mirrors.shanghaitech.edu.cn|g' \
+         -i.bak \
+         /etc/yum.repos.d/CentOS-*.repo && \
+    sed  -i '2c enabled=0' /etc/yum/pluginconf.d/fastestmirror.conf && yum -y install epel-release && \
+    yum -y install sudo wget which git vim tree openssh-server openssh-clients net-tools
 
-# install slurm 19.05.1
 COPY rpms /packages
-# /usr/bin/mpiexec from slurm-torque conflicts with openmpi install
 WORKDIR /packages
-RUN yum -y localinstall $(ls | grep -v -e 'torque' -e 'openmpi')
+RUN yum -y localinstall $(ls | grep 'munge') && yum -y localinstall $(ls | grep -v -e 'torque' -e 'openmpi')
+
+VOLUME ["/storage","/.secret"]
 WORKDIR /
-
-VOLUME ["/home", "/.secret"]
-
-#   22:         SSH
-# 3306:         MariaDB
-# 6817:         Slurm Ctl D
-# 6818:         Slurm D
-# 6819:         Slurm DBD
-EXPOSE 22 3306 6817 6818 6819
+EXPOSE 22 6817 6818

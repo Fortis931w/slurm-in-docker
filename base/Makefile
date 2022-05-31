@@ -1,6 +1,5 @@
-
-SLURM_VERSION = 19.05.1
-IMAGE = scidas/slurm.base
+SLURM_VERSION = 21.08.8-2
+IMAGE = slurm.base
 
 DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 
@@ -9,9 +8,9 @@ DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 all: build
 
 build:
-	cp -r "$(DIR)/../packages/centos-7/rpms" .
-	docker build -t $(IMAGE):$(SLURM_VERSION) .
+	cp -r -f "$(DIR)/../packages/rpms" .
+	docker build -t $(IMAGE) .
 
 clean:
-	@[ -z $(docker images -q $(IMAGE):$(SLURM_VERSION)) ] || docker rmi $(IMAGE):$(SLURM_VERSION)
+	@[ -z $(docker images -q $(IMAGE)) ] || docker rmi $(IMAGE)
 	rm -rf rpms

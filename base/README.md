@@ -1,3 +1,0 @@
-# Slurm Base Image
-
-TODO

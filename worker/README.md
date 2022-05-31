@@ -1,3 +1,0 @@
-# Slurm Worker
-
-TODO
