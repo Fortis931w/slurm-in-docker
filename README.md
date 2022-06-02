@@ -23,7 +23,7 @@ SLURM_SINGULARITY_DEBUG=true SLURM_SINGULARITY_GLOBAL=--silent \
            --singularity-args="--no-home" \
            -- /bin/grep -i pretty /etc/os-release
 ```
-This docker-compose is integrated with [Singularity](https://github.com/sylabs/singularity) and [Singularity spank plugin](https://github.com/Fortis931w/slurm-singularity-exec.git).
+This docker cluster is integrated with [Singularity](https://github.com/sylabs/singularity) and [Singularity spank plugin](https://github.com/Fortis931w/slurm-singularity-exec.git).
 
 ## Containers 
 <img width="80%" alt="Slurm cluster" src="images/1.png">
@@ -69,7 +69,7 @@ drwxrwxr-x 3 root   root       4096 Jun  2 01:58 ..
 
 For any additional packages needed for clusters to explore, you are free to load the rpm packages in the folder. The packages will be installed in `base` image via `yum localinstall`.
 
-After `make` or `docker-compose build` execution in the repo, it is safe to check if the images are built in the right way.
+After `make` or `docker-compose build` execution to build up all the images, it is safe to check if the images are built in the right way.
 ```bash
 ~/$ docker images
 REPOSITORY            TAG       IMAGE ID       CREATED        SIZE
@@ -83,7 +83,7 @@ As is successfully built up, to startup the cluster,
 ```bash
 docker-compose up -d
 ```
-Four containers will be running a while after the worker node start in configless mode.
+Four containers will be running a while after the worker node start in [configless mode](https://slurm.schedmd.com/configless_slurm.html).
 ```bash
 ~/slurm-in-docker$ docker ps -a
 CONTAINER ID   IMAGE              COMMAND                  CREATED       STATUS       PORTS                   NAMES
@@ -93,7 +93,7 @@ e59504b5ce3d   slurm.worker       "/usr/local/bin/tini…"   3 hours ago   Up 3 
 5b42948dcd7f   slurm.worker       "/usr/local/bin/tini…"   3 hours ago   Up 3 hours   22/tcp, 6817-6818/tcp   worker01
 ```
 
-The `controller` node will run the `slurmctld` and `slurmdbd` service. You can start from controller node 
+The `controller` node will run the `slurmctld` and `slurmdbd` service while the `worker` nodes get the config files via DNS record and hostname from the startup instruction. Anyway, the cluster starts and you can make use of the slurm from controller node 
 ```bash
 $ docker exec -it controller su
 [root@balthasar /]# sinfo -lN

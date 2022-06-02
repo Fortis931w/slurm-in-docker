@@ -5,6 +5,7 @@ wget --tries=5 https://github.com/dun/munge/releases/download/munge-0.5.14/munge
 wget --tries=5 https://github.com/dun.gpg
 wget --tries=5 https://github.com/dun/munge/releases/download/munge-0.5.14/munge-0.5.14.tar.xz.asc
 rpmbuild -tb munge-0.5.14.tar.xz
+yum localinstall -y /root/rpmbuild/RPMS/x86_64/munge-*
 cp /root/rpmbuild/RPMS/x86_64/munge-* /packages
 
 wget --tries=5 https://download.schedmd.com/slurm/slurm-${SLURM_VERSION}.tar.bz2

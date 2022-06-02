@@ -16,6 +16,7 @@ RUN yum -y install epel-release && \
 COPY rpms /packages
 WORKDIR /packages
 RUN yum -y localinstall $(ls | grep 'munge') && yum -y localinstall $(ls | grep -v -e 'torque' -e 'openmpi') && \
+    yum install -y centos-release-scl && yum install -y devtoolset-11 && \
     git clone https://github.com/fortis931w/slurm-singularity-exec.git && cd slurm-singularity-exec && \
     mkdir -p /etc/slurm/spank && source scl_source enable devtoolset-11 && make singularity-exec.so && \
     make install 
