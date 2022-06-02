@@ -24,6 +24,7 @@ ln -s /root/rpmbuild/SPECS SPECS
 cd -
 ./buildrpm.sh -b -s -c --with-slurm -c --with-pmi openmpi-${OPENMPI_VERSION}.tar.bz2
 cp /root/rpmbuild/RPMS/x86_64/openmpi-* /packages
-
+cd /packages
+wget --tries=5 https://github.com/sylabs/singularity/releases/download/v3.10.0/singularity-ce-3.10.0-1.el7.x86_64.rpm
 
 exec "$@"

@@ -10,16 +10,15 @@ RUN groupadd -g $MUNGE_UID munge \
   && groupadd -g $WORKER_UID worker \
   && useradd  -m -c "Workflow user" -d /home/worker -u $WORKER_UID -g worker  -s /bin/bash worker
 
-RUN sed -e 's|^mirrorlist=|#mirrorlist=|g' \
-         -e 's|^#baseurl=http://mirror.centos.org|baseurl=https://mirrors.shanghaitech.edu.cn|g' \
-         -i.bak \
-         /etc/yum.repos.d/CentOS-*.repo && \
-    sed  -i '2c enabled=0' /etc/yum/pluginconf.d/fastestmirror.conf && yum -y install epel-release && \
+RUN yum -y install epel-release && \
     yum -y install sudo wget which git vim tree openssh-server openssh-clients net-tools
 
 COPY rpms /packages
 WORKDIR /packages
-RUN yum -y localinstall $(ls | grep 'munge') && yum -y localinstall $(ls | grep -v -e 'torque' -e 'openmpi')
+RUN yum -y localinstall $(ls | grep 'munge') && yum -y localinstall $(ls | grep -v -e 'torque' -e 'openmpi') && \
+    git clone https://github.com/fortis931w/slurm-singularity-exec.git && cd slurm-singularity-exec && \
+    mkdir -p /etc/slurm/spank && source scl_source enable devtoolset-11 && make singularity-exec.so && \
+    make install 
 
 VOLUME ["/storage","/.secret"]
 WORKDIR /

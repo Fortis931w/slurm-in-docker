@@ -133,7 +133,7 @@ _generate_slurm_conf() {
      # 2: 使用有效配置注册后，DOWN节点将可供使用。该节点可能因任何原因被设置为DOWN状态。当节点的内存、GRES、CPU计数等等于或大于slurm.conf 中配置的值，该节点才注册为有效配置。￼
 
  # Default MPI Type：默认MPI类型
- MPIDefault=None
+ MPIDefault=none
      # MPI-PMI2: 对支持PMI2的MPI实现
      # MPI-PMIx: Exascale PMI实现
      # None: 对于大多数其它MPI，建议设置
@@ -265,7 +265,7 @@ _generate_slurm_conf() {
  WaitTime=0 # 在一个作业步的第一个任务结束后等待多少秒后结束所有其它任务，0表示无限长等待
 
  # Compute Machines：计算节点
- NodeName=casper[01-03] RealMemory=18000 CPUs=1 State=UNKNOWN
+ NodeName=casper[01-03] RealMemory=1800 CPUs=1 State=UNKNOWN
  # NodeName=gnode[01-10] Gres=gpu:v100:2 CPUs=40 RealMemory=385560 Sockets=2 CoresPerSocket=20 ThreadsPerCore=1 State=UNKNOWN #GPU节点例子，主要为Gres=gpu:v100:2
      # NodeName=node[1-10] # 计算节点名，node[1-10]表示为从node1、node2连续编号到node10，其余类似
      # NodeAddr=192.168.1.[1-10] # 计算节点IP
